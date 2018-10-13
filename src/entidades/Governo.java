@@ -35,12 +35,13 @@ public class Governo extends Cliente {
     }
 
     @Override
-    public double getValorTotal() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public String imprimirDados() {
+        return toString();
     }
 
     @Override
-    public String imprimirDados() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public String toString() {
+        return String.format("%s\n%s\nNome do Contato: %s", super.toString(), empresa, nomeContato);
     }
+
 }

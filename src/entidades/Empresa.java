@@ -30,4 +30,9 @@ public class Empresa {
         this.razaoSocial = razaoSocial;
     }
 
+    @Override
+    public String toString() {
+        return String.format("Razão Social: %s\nCNPJ: %s", razaoSocial, cnpj);
+    }
+
 }

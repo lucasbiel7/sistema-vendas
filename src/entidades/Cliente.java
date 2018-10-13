@@ -14,8 +14,6 @@ public abstract class Cliente {
     private int id;
     private Status status;
 
-    public abstract double getValorTotal();
-
     public int getId() {
         return id;
     }
@@ -33,4 +31,10 @@ public abstract class Cliente {
     }
 
     public abstract String imprimirDados();
+
+    @Override
+    public String toString() {
+        return String.format("Cliente\nId: %d\nStatus: %s", getId(), status.getDescricao());
+    }
+
 }

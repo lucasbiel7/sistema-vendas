@@ -16,6 +16,7 @@ public abstract class Venda {
     private Cliente cliente;
     private int prazoEntrega;
     private double percentualImposto;
+    private double valorVenda;
     private double desconto;
     private double valorTotal;
 
@@ -65,6 +66,14 @@ public abstract class Venda {
 
     public void setValorTotal(double valorTotal) {
         this.valorTotal = valorTotal;
+    }
+
+    public double getValorVenda() {
+        return valorVenda;
+    }
+
+    public void setValorVenda(double valorVenda) {
+        this.valorVenda = valorVenda;
     }
 
 }

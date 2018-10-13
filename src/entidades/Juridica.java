@@ -23,12 +23,13 @@ public class Juridica extends Pessoa {
     }
 
     @Override
-    public double getValorTotal() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public String imprimirDados() {
+        return toString();
     }
 
     @Override
-    public String imprimirDados() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public String toString() {
+        return String.format("%s\n%s", super.toString(), empresa);
     }
+
 }

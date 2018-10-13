@@ -34,4 +34,10 @@ public abstract class Pessoa extends Cliente {
     public double consultarLimiteDisponivel() {
         return getLimiteCredito() - getValorAberto();
     }
+
+    @Override
+    public String toString() {
+        return String.format("%s\nLimite de credito: %.2f\nValor em aberto: %.2f\nLimite disponível: %.2f", super.toString(), limiteCredito, valorAberto, consultarLimiteDisponivel());
+    }
+
 }
