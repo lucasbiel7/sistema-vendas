@@ -7,13 +7,13 @@ package entidades;
 
 /**
  *
- * @author aluno
+ * @author Lucas Gabriel
  */
 public abstract class Cliente {
-    
+
     private int id;
     private Status status;
-    
+
     public abstract double getValorTotal();
 
     public int getId() {
@@ -31,5 +31,6 @@ public abstract class Cliente {
     public void setStatus(Status status) {
         this.status = status;
     }
-    
+
+    public abstract String imprimirDados();
 }

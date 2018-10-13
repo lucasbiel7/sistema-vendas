@@ -7,22 +7,40 @@ package entidades;
 
 /**
  *
- * @author aluno
+ * @author Lucas Gabriel
  */
 public class Governo extends Cliente {
-    
-    private String cnpj;
-    private String razaoSocial;
+
+    private Empresa empresa;
     private String nomeContato;
 
     public Governo() {
-        
+
+    }
+
+    public Empresa getEmpresa() {
+        return empresa;
+    }
+
+    public void setEmpresa(Empresa empresa) {
+        this.empresa = empresa;
+    }
+
+    public String getNomeContato() {
+        return nomeContato;
+    }
+
+    public void setNomeContato(String nomeContato) {
+        this.nomeContato = nomeContato;
     }
 
     @Override
     public double getValorTotal() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
-    
+
+    @Override
+    public String imprimirDados() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

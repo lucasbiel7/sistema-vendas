@@ -7,31 +7,28 @@ package entidades;
 
 /**
  *
- * @author aluno
+ * @author Lucas Gabriel
+ *
  */
-public class Juridica extends Pessoa{
-    
-    private String cnpj;
-    private String razaoSocial;
+public class Juridica extends Pessoa {
 
-    public String getCnpj() {
-        return cnpj;
+    private Empresa empresa;
+
+    public Empresa getEmpresa() {
+        return empresa;
     }
 
-    public void setCnpj(String cnpj) {
-        this.cnpj = cnpj;
-    }
-
-    public String getRazaoSocial() {
-        return razaoSocial;
-    }
-
-    public void setRazaoSocial(String razaoSocial) {
-        this.razaoSocial = razaoSocial;
+    public void setEmpresa(Empresa empresa) {
+        this.empresa = empresa;
     }
 
     @Override
     public double getValorTotal() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }   
+    }
+
+    @Override
+    public String imprimirDados() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

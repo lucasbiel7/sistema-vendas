@@ -7,10 +7,11 @@ package entidades;
 
 /**
  *
- * @author aluno
+ * @author Lucas Gabriel
+ *
  */
-public class Fisica extends Pessoa{
-    
+public class Fisica extends Pessoa {
+
     private String nome;
     private String cpf;
 
@@ -29,11 +30,15 @@ public class Fisica extends Pessoa{
     public void setCpf(String cpf) {
         this.cpf = cpf;
     }
-    
 
     @Override
     public double getValorTotal() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
+    @Override
+    public String imprimirDados() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

@@ -7,32 +7,31 @@ package entidades;
 
 /**
  *
- * @author aluno
+ * @author Lucas Gabriel
+ *
  */
-public abstract class Pessoa extends Cliente{
-    
+public abstract class Pessoa extends Cliente {
+
     public double limiteCredito;
     public double valorAberto;
 
-    protected double getLimiteCredito() {
+    public double getLimiteCredito() {
         return limiteCredito;
     }
 
-    protected void setLimiteCredito(double limiteCredito) {
+    public void setLimiteCredito(double limiteCredito) {
         this.limiteCredito = limiteCredito;
     }
 
-    protected double getValorAberto() {
+    public double getValorAberto() {
         return valorAberto;
     }
 
-    protected void setValorAberto(double valorAberto) {
+    public void setValorAberto(double valorAberto) {
         this.valorAberto = valorAberto;
     }
-    
-    public double consultarLimiteDisponivel(){
-        return getLimiteCredito()-getValorAberto();
+
+    public double consultarLimiteDisponivel() {
+        return getLimiteCredito() - getValorAberto();
     }
-    
-    
 }
