@@ -16,6 +16,7 @@ import entidades.Venda;
 import entidades.VendaAPrazo;
 import entidades.VendaAVista;
 import exceptions.ClienteInvalidoException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -31,12 +32,13 @@ public class Menu {
     public static final String VALORES_NEGATIVOS = "Não é permitido valores negativos";
     public static final int MAX_ID = 300;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException, InterruptedException {
         int op;
         Scanner scanner = new Scanner(System.in);
         Scanner scannerNumerico = new Scanner(System.in);
         List<Cliente> clientes = new ArrayList<>();
         List<Venda> vendas = new ArrayList<>();
+        //Menu dos cadastros
         do {
             System.out.println("1 - Inserir cliente");
             System.out.println("2 - Inserir venda");
@@ -97,6 +99,13 @@ public class Menu {
                         perguntasVenda(venda, clientes, scannerNumerico, vendas);
                         if (venda.vendaValida()) {
                             System.out.printf("Venda %d registrada com sucesso!\n", venda.getId());
+                            if (venda instanceof VendaAPrazo) {
+                                if (venda.getCliente() instanceof Pessoa) {
+                                    Pessoa pessoa = (Pessoa) venda.getCliente();
+                                    pessoa.setValorAberto(pessoa.getValorAberto() + venda.getValorTotal());
+                                }
+                            }
+                            vendas.add(venda);
                         } else {
                             System.out.println("Parece que há algo incorreto nessa venda\n"
                                     + "Não foi possível continuar com o seu registro!");
@@ -110,6 +119,29 @@ public class Menu {
                     break;
             }
         } while (op != 0);
+        //Menu das vendas
+        System.out.println("-----------------Gerenciar suas vendas-------------------------");
+        do {
+            System.out.println("1- Imprimir cupom");
+            System.out.println("0- Sair");
+            op = scannerNumerico.nextInt();
+            switch (op) {
+                case 1:
+                    System.out.println("Digite o id da venda");
+                    int id = scannerNumerico.nextInt();
+                    Venda venda = vendas.stream().filter(t -> t.getId() == id).findFirst().orElse(null);
+                    if (venda != null) {
+                        System.out.println(venda.imprimirCupom());
+
+                    } else {
+                        System.out.println("Não foi encontrado está venda!");
+                    }
+                    break;
+                default:
+                    break;
+            }
+        } while (op != 0);
+
     }
 
     public static void perguntasFisica(Fisica fisica, Scanner scanner) {

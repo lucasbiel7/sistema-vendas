@@ -29,7 +29,7 @@ public class Juridica extends Pessoa {
 
     @Override
     public String toString() {
-        return String.format("%s\n%s", super.toString(), empresa);
+        return String.format("%s\n%s", super.toString(), empresa).replace("{tipo}", "Pessoa Jurídica");
     }
 
 }

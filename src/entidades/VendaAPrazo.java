@@ -38,7 +38,7 @@ public class VendaAPrazo extends Venda {
 
     @Override
     public String imprimirCupom() {
-        return String.format("Venda a prazo\n%s", toString());
+        return String.format("Venda a prazo\n%s\n Acrescimo: %.2f", toString(), calcularAcrescimo());
     }
 
     @Override

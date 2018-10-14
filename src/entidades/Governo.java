@@ -41,7 +41,7 @@ public class Governo extends Cliente {
 
     @Override
     public String toString() {
-        return String.format("%s\n%s\nNome do Contato: %s", super.toString(), empresa, nomeContato);
+        return String.format("%s\n%s\nNome do Contato: %s", super.toString(), empresa, nomeContato).replace("{tipo}", "Governo");
     }
 
 }

@@ -34,7 +34,7 @@ public abstract class Cliente {
 
     @Override
     public String toString() {
-        return String.format("Cliente\nId: %d\nStatus: %s", getId(), status.getDescricao());
+        return String.format("Cliente {tipo}\nId: %d\nStatus: %s", getId(), status.getDescricao());
     }
 
 }

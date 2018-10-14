@@ -11,34 +11,34 @@ package entidades;
  *
  */
 public class Fisica extends Pessoa {
-
+    
     private String nome;
     private String cpf;
-
+    
     public String getNome() {
         return nome;
     }
-
+    
     public void setNome(String nome) {
         this.nome = nome;
     }
-
+    
     public String getCpf() {
         return cpf;
     }
-
+    
     public void setCpf(String cpf) {
         this.cpf = cpf;
     }
-
+    
     @Override
     public String imprimirDados() {
         return toString();
     }
-
+    
     @Override
     public String toString() {
-        return String.format("%s\nNome: %s\nCPF: %s", super.toString(), nome, cpf);
+        return String.format("%s\nNome: %s\nCPF: %s", super.toString(), nome, cpf).replace("{tipo}", "Pessoa Física");
     }
-
+    
 }
