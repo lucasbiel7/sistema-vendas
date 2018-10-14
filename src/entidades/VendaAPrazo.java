@@ -38,7 +38,7 @@ public class VendaAPrazo extends Venda {
 
     @Override
     public String imprimirCupom() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return String.format("Venda a prazo\n%s", toString());
     }
 
     @Override
@@ -53,4 +53,8 @@ public class VendaAPrazo extends Venda {
                 && ((Pessoa) getCliente()).getLimiteCredito() - getValorTotal() >= 0;
     }
 
+    @Override
+    public String toString() {
+        return String.format("%s\nAcrescimo: %.2f", super.toString(), calcularAcrescimo());
+    }
 }

@@ -92,4 +92,8 @@ public abstract class Venda {
 
     public abstract void atualizarValorTotal();
 
+    @Override
+    public String toString() {
+        return String.format("Valor da venda: %.2f\nDesconto: %.2f\nImposto: %.2f\nValor total: %.2f \nPrazo de entrega: %d\n%s\n", getValorVenda(), calcularDesconto(), calcularImposto(), getValorTotal(), getPrazoEntrega(), cliente);
+    }
 }

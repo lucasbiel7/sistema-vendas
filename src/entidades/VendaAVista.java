@@ -13,12 +13,12 @@ public class VendaAVista extends Venda {
 
     @Override
     public String imprimirCupom() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return String.format("Venda a Vista\n%s", super.toString());
     }
 
     @Override
     public void atualizarValorTotal() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        valorTotal = getValorVenda() + calcularImposto() - calcularDesconto();
     }
 
 }

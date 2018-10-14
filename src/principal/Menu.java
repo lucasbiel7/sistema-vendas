@@ -29,6 +29,7 @@ import java.util.stream.Collectors;
 public class Menu {
 
     public static final String VALORES_NEGATIVOS = "Não é permitido valores negativos";
+    public static final int MAX_ID = 300;
 
     public static void main(String[] args) {
         int op;
@@ -57,22 +58,21 @@ public class Menu {
                         case 1:
                             cliente = new Fisica();
                             perguntasFisica((Fisica) cliente, scanner);
-                            perguntasPadraoPessoa((Pessoa) cliente, scannerNumerico);
-                            perguntasPadraoCliente(cliente, scanner, clientes);
                             break;
                         case 2:
                             cliente = new Juridica();
                             ((Juridica) cliente).setEmpresa(perguntasEmpresa(scanner));
-                            perguntasPadraoPessoa((Pessoa) cliente, scannerNumerico);
-                            perguntasPadraoCliente(cliente, scanner, clientes);
                             break;
                         case 3:
                             cliente = new Governo();
                             ((Governo) cliente).setEmpresa(perguntasEmpresa(scanner));
                             perguntasGoverno((Governo) cliente, scanner);
-                            perguntasPadraoCliente(cliente, scanner, clientes);
                             break;
                     }
+                    if (cliente instanceof Pessoa) {
+                        perguntasPadraoPessoa((Pessoa) cliente, scannerNumerico);
+                    }
+                    perguntasPadraoCliente(cliente, scanner, clientes);
                     clientes.add(cliente);
                     break;
                 case 2:
@@ -88,16 +88,15 @@ public class Menu {
                         switch (tipoVenda) {
                             case 1:
                                 venda = new VendaAVista();
-                                perguntasVenda(venda, clientes, scannerNumerico, vendas);
                                 break;
                             case 2:
                                 venda = new VendaAPrazo();
-                                perguntasVenda(venda, clientes, scannerNumerico, vendas);
                                 perguntasVendaAPrazo((VendaAPrazo) venda, scannerNumerico);
                                 break;
                         }
+                        perguntasVenda(venda, clientes, scannerNumerico, vendas);
                         if (venda.vendaValida()) {
-                            System.out.println("Venda registrada com sucesso!");
+                            System.out.printf("Venda %d registrada com sucesso!\n", venda.getId());
                         } else {
                             System.out.println("Parece que há algo incorreto nessa venda\n"
                                     + "Não foi possível continuar com o seu registro!");
@@ -197,7 +196,7 @@ public class Menu {
     private static int geradorId(List<Integer> identificadores) {
         int id;
         do {
-            id = new Random().nextInt(200);
+            id = new Random().nextInt(MAX_ID);
         } while (identificadores.contains(id));
         return id;
     }
