@@ -15,6 +15,7 @@ import entidades.Status;
 import entidades.Venda;
 import entidades.VendaAPrazo;
 import entidades.VendaAVista;
+import exceptions.ClienteInvalidoException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -83,16 +84,23 @@ public class Menu {
                             System.out.println("2 - Venda à prazo");
                             tipoVenda = scannerNumerico.nextInt();
                         } while (tipoVenda != 1 && tipoVenda != 2);
-                        Venda venda;
+                        Venda venda = null;
                         switch (tipoVenda) {
                             case 1:
                                 venda = new VendaAVista();
-                                perguntasVenda(venda, clientes, scanner, scannerNumerico);
+                                perguntasVenda(venda, clientes, scannerNumerico, vendas);
                                 break;
                             case 2:
                                 venda = new VendaAPrazo();
-                                perguntasVenda(venda, clientes, scanner, scannerNumerico);
+                                perguntasVenda(venda, clientes, scannerNumerico, vendas);
+                                perguntasVendaAPrazo((VendaAPrazo) venda, scannerNumerico);
                                 break;
+                        }
+                        if (venda.vendaValida()) {
+                            System.out.println("Venda registrada com sucesso!");
+                        } else {
+                            System.out.println("Parece que há algo incorreto nessa venda\n"
+                                    + "Não foi possível continuar com o seu registro!");
                         }
                     } else {
                         System.out.println("É necessário cadastrar clientes primeiramente!");
@@ -120,13 +128,8 @@ public class Menu {
             System.out.println(status);
         } while (status != 'A' && status != 'I');
         cliente.setStatus(status == 'A' ? Status.ATIVO : Status.INATIVO);
-        int id;
-        do {
-            id = new Random().nextInt(200);
-            System.out.println(id);
-        } while (clientes.stream().map(Cliente::getId).collect(Collectors.toList()).contains(id));
-        cliente.setId(id);
-        System.out.printf("Seu id é %d\n", id);
+        cliente.setId(geradorId(clientes.stream().map(Cliente::getId).collect(Collectors.toList())));
+        System.out.printf("Seu id é %d\n", cliente.getId());
     }
 
     public static void perguntasPadraoPessoa(Pessoa pessoa, Scanner scanner) {
@@ -162,11 +165,16 @@ public class Menu {
         }
     }
 
-    private static void perguntasVenda(Venda venda, List<Cliente> clientes, Scanner scanner, Scanner scannerNumerico) {
+    private static void perguntasVenda(Venda venda, List<Cliente> clientes, Scanner scannerNumerico, List<Venda> vendas) {
+        venda.setId(geradorId(vendas.stream().map(Venda::getId).collect(Collectors.toList())));
         do {
             System.out.println("Digite o id do cliente");
             int id = scannerNumerico.nextInt();
-            venda.setCliente(clientes.stream().filter(t -> t.getId() == id).findFirst().orElse(null));
+            try {
+                venda.setCliente(clientes.stream().filter(t -> t.getId() == id).findFirst().orElse(null));
+            } catch (ClienteInvalidoException e) {
+                System.out.println(e.getMessage());
+            }
         } while (venda.getCliente() == null);
         do {
             System.out.println("Digite o valor do desconto?\n" + VALORES_NEGATIVOS);
@@ -184,5 +192,20 @@ public class Menu {
             System.out.println("Digite o valor da venda?\n" + VALORES_NEGATIVOS);
             venda.setValorVenda(scannerNumerico.nextDouble());
         } while (venda.getValorVenda() < 0);
+    }
+
+    private static int geradorId(List<Integer> identificadores) {
+        int id;
+        do {
+            id = new Random().nextInt(200);
+        } while (identificadores.contains(id));
+        return id;
+    }
+
+    private static void perguntasVendaAPrazo(VendaAPrazo venda, Scanner scannerNumerico) {
+        do {
+            System.out.println("Digite o valor do acrescimo?\n" + VALORES_NEGATIVOS);
+            venda.setAcrescimo(scannerNumerico.nextDouble());
+        } while (venda.getAcrescimo() < 0);
     }
 }

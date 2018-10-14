@@ -11,4 +11,14 @@ package entidades;
  */
 public class VendaAVista extends Venda {
 
+    @Override
+    public String imprimirCupom() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void atualizarValorTotal() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

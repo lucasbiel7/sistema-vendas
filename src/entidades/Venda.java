@@ -18,7 +18,7 @@ public abstract class Venda {
     private double percentualImposto;
     private double valorVenda;
     private double desconto;
-    private double valorTotal;
+    protected double valorTotal;
 
     public int getId() {
         return id;
@@ -50,6 +50,7 @@ public abstract class Venda {
 
     public void setPercentualImposto(double percentualImposto) {
         this.percentualImposto = percentualImposto;
+        atualizarValorTotal();
     }
 
     public double getDesconto() {
@@ -58,14 +59,11 @@ public abstract class Venda {
 
     public void setDesconto(double desconto) {
         this.desconto = desconto;
+        atualizarValorTotal();
     }
 
     public double getValorTotal() {
         return valorTotal;
-    }
-
-    public void setValorTotal(double valorTotal) {
-        this.valorTotal = valorTotal;
     }
 
     public double getValorVenda() {
@@ -74,6 +72,24 @@ public abstract class Venda {
 
     public void setValorVenda(double valorVenda) {
         this.valorVenda = valorVenda;
+        atualizarValorTotal();
     }
+
+    public double calcularDesconto() {
+        return valorVenda * desconto / 100;
+    }
+
+    public double calcularImposto() {
+        return valorVenda * percentualImposto / 100;
+    }
+
+    public boolean vendaValida() {
+        return getValorTotal() >= 0 && getValorVenda() >= 0 && getPrazoEntrega() >= 0
+                && getPercentualImposto() >= 0 && getDesconto() >= 0;
+    }
+
+    public abstract String imprimirCupom();
+
+    public abstract void atualizarValorTotal();
 
 }
