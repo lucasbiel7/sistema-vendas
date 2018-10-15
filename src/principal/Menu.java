@@ -16,6 +16,14 @@ import entidades.Venda;
 import entidades.VendaAPrazo;
 import entidades.VendaAVista;
 import exceptions.ClienteInvalidoException;
+import exceptions.DescontoInvalidoException;
+import exceptions.LimiteCreditoInvalidoException;
+import exceptions.PercentualImpostoException;
+import exceptions.PrazoEntregaInvalidoException;
+import exceptions.ValorAbertoInvalidoException;
+import exceptions.ValorAcrescimoInvalidoException;
+import exceptions.ValorVendaInvalidoExeption;
+import exceptions.VendaInvalidaException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +54,8 @@ public class Menu {
             System.out.println("0 - Sair");
             op = scannerNumerico.nextInt();
             switch (op) {
+                case 0:
+                    break;
                 case 1:
                     int tipoCliente;
                     do {
@@ -97,18 +107,20 @@ public class Menu {
                                 break;
                         }
                         perguntasVenda(venda, clientes, scannerNumerico, vendas);
-                        if (venda.vendaValida()) {
-                            System.out.printf("Venda %d registrada com sucesso!\n", venda.getId());
-                            if (venda instanceof VendaAPrazo) {
-                                if (venda.getCliente() instanceof Pessoa) {
-                                    Pessoa pessoa = (Pessoa) venda.getCliente();
-                                    pessoa.setValorAberto(pessoa.getValorAberto() + venda.getValorTotal());
+                        try {
+                            if (venda != null) {
+                                venda.vendaValida();
+                                System.out.printf("Venda %d registrada com sucesso!\n", venda.getId());
+                                if (venda instanceof VendaAPrazo) {
+                                    if (venda.getCliente() instanceof Pessoa) {
+                                        Pessoa pessoa = (Pessoa) venda.getCliente();
+                                        pessoa.setValorAberto(pessoa.getValorAberto() + venda.getValorTotal());
+                                    }
                                 }
+                                vendas.add(venda);
                             }
-                            vendas.add(venda);
-                        } else {
-                            System.out.println("Parece que há algo incorreto nessa venda\n"
-                                    + "Não foi possível continuar com o seu registro!");
+                        } catch (VendaInvalidaException e) {
+                            System.out.println(e.getMessage());
                         }
                     } else {
                         System.out.println("É necessário cadastrar clientes primeiramente!");
@@ -117,15 +129,21 @@ public class Menu {
                 case 3:
                     imprimirClientes(clientes);
                     break;
+                default:
+                    System.out.println("Opção inválida!");
+                    break;
             }
         } while (op != 0);
         //Menu das vendas
         System.out.println("-----------------Gerenciar suas vendas-------------------------");
         do {
             System.out.println("1- Imprimir cupom");
+            System.out.println("2- Vendas registradas");
             System.out.println("0- Sair");
             op = scannerNumerico.nextInt();
             switch (op) {
+                case 0:
+                    break;
                 case 1:
                     System.out.println("Digite o id da venda");
                     int id = scannerNumerico.nextInt();
@@ -137,7 +155,10 @@ public class Menu {
                         System.out.println("Não foi encontrado está venda!");
                     }
                     break;
+                case 2:
+                    imprimirVendas(vendas);
                 default:
+                    System.out.println("Opção inválida!");
                     break;
             }
         } while (op != 0);
@@ -164,15 +185,27 @@ public class Menu {
     }
 
     public static void perguntasPadraoPessoa(Pessoa pessoa, Scanner scanner) {
+        boolean invalido;
         do {
-            System.out.println("Qual é o seu limite de credito?\n" + VALORES_NEGATIVOS);
-            pessoa.setLimiteCredito(scanner.nextDouble());
-        } while (pessoa.getValorAberto() < 0);
-
+            invalido = false;
+            System.out.println("Qual é o seu limite de credito?");
+            try {
+                pessoa.setLimiteCredito(scanner.nextDouble());
+            } catch (LimiteCreditoInvalidoException e) {
+                System.out.println(e.getMessage());
+                invalido = true;
+            }
+        } while (invalido);
         do {
-            System.out.println("Você possui algum valor em aberto?\n" + VALORES_NEGATIVOS);
-            pessoa.setValorAberto(scanner.nextDouble());
-        } while (pessoa.getValorAberto() < 0);
+            invalido = false;
+            System.out.println("Você possui algum valor em aberto?");
+            try {
+                pessoa.setValorAberto(scanner.nextDouble());
+            } catch (ValorAbertoInvalidoException e) {
+                System.out.println(e.getMessage());
+                invalido = true;
+            }
+        } while (invalido);
     }
 
     private static Empresa perguntasEmpresa(Scanner scanner) {
@@ -207,22 +240,47 @@ public class Menu {
                 System.out.println(e.getMessage());
             }
         } while (venda.getCliente() == null);
+        boolean invalido;
         do {
-            System.out.println("Digite o valor do desconto?\n" + VALORES_NEGATIVOS);
-            venda.setDesconto(scannerNumerico.nextDouble());
-        } while (venda.getDesconto() < 0);
+            invalido = false;
+            System.out.println("Digite o valor do desconto?");
+            try {
+                venda.setDesconto(scannerNumerico.nextDouble());
+            } catch (DescontoInvalidoException e) {
+                System.out.println(e.getMessage());
+                invalido = true;
+            }
+        } while (invalido);
         do {
-            System.out.println("Digite o valor do percentual de imposto?\n" + VALORES_NEGATIVOS);
-            venda.setPercentualImposto(scannerNumerico.nextDouble());
-        } while (venda.getPercentualImposto() < 0);
+            invalido = false;
+            System.out.println("Digite o valor do percentual de imposto?");
+            try {
+                venda.setPercentualImposto(scannerNumerico.nextDouble());
+            } catch (PercentualImpostoException e) {
+                System.out.println(e.getMessage());
+                invalido = true;
+            }
+        } while (invalido);
         do {
-            System.out.println("Digite o prazo de entrega?\n" + VALORES_NEGATIVOS);
-            venda.setPrazoEntrega(scannerNumerico.nextInt());
-        } while (venda.getPrazoEntrega() < 0);
+            invalido = false;
+            System.out.println("Digite o prazo de entrega?");
+            try {
+                venda.setPrazoEntrega(scannerNumerico.nextInt());
+            } catch (PrazoEntregaInvalidoException e) {
+                System.out.println(e.getMessage());
+                invalido = true;
+            }
+        } while (invalido);
         do {
-            System.out.println("Digite o valor da venda?\n" + VALORES_NEGATIVOS);
-            venda.setValorVenda(scannerNumerico.nextDouble());
-        } while (venda.getValorVenda() < 0);
+            invalido = false;
+            System.out.println("Digite o valor da venda?");
+            try {
+                venda.setValorVenda(scannerNumerico.nextDouble());
+            } catch (ValorVendaInvalidoExeption e) {
+                System.out.println(e.getMessage());
+                invalido = true;
+            }
+        } while (invalido);
     }
 
     private static int geradorId(List<Integer> identificadores) {
@@ -234,9 +292,22 @@ public class Menu {
     }
 
     private static void perguntasVendaAPrazo(VendaAPrazo venda, Scanner scannerNumerico) {
+        boolean invalido;
         do {
+            invalido = false;
             System.out.println("Digite o valor do acrescimo?\n" + VALORES_NEGATIVOS);
-            venda.setAcrescimo(scannerNumerico.nextDouble());
-        } while (venda.getAcrescimo() < 0);
+            try {
+                venda.setAcrescimo(scannerNumerico.nextDouble());
+            } catch (ValorAcrescimoInvalidoException e) {
+                System.out.println(e.getMessage());
+                invalido = true;
+            }
+        } while (invalido);
+    }
+
+    private static void imprimirVendas(List<Venda> vendas) {
+        for (Venda venda : vendas) {
+            System.out.printf("Venda: %d Cliente: %d", venda.getId(), venda.getCliente().getId());
+        }
     }
 }

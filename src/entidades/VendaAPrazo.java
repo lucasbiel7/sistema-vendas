@@ -6,6 +6,8 @@
 package entidades;
 
 import exceptions.ClienteInvalidoException;
+import exceptions.ValorAcrescimoInvalidoException;
+import exceptions.VendaInvalidaException;
 
 /**
  *
@@ -28,6 +30,9 @@ public class VendaAPrazo extends Venda {
     }
 
     public void setAcrescimo(double acrescimo) {
+        if (acrescimo < 0 || acrescimo > 100) {
+            throw new ValorAcrescimoInvalidoException("Não é permitido valores de acrescimo menor que 0 e maior que 100%!");
+        }
         this.acrescimo = acrescimo;
         atualizarValorTotal();
     }
@@ -38,7 +43,7 @@ public class VendaAPrazo extends Venda {
 
     @Override
     public String imprimirCupom() {
-        return String.format("Venda a prazo\n%s\n Acrescimo: %.2f", toString(), calcularAcrescimo());
+        return String.format("Venda a prazo\n%s\n", toString());
     }
 
     @Override
@@ -47,10 +52,17 @@ public class VendaAPrazo extends Venda {
     }
 
     @Override
-    public boolean vendaValida() {
-        return super.vendaValida() && !(getCliente() instanceof Governo)
-                && getCliente().getStatus().equals(Status.ATIVO)
-                && ((Pessoa) getCliente()).getLimiteCredito() - getValorTotal() >= 0;
+    public void vendaValida() {
+        super.vendaValida();
+        if (getCliente().getStatus().equals(Status.INATIVO)) {
+            throw new VendaInvalidaException("Não é permitido realizar venda para clientes invativos!");
+        }
+        if (getCliente() instanceof Governo) {
+            throw new VendaInvalidaException("Não é permitido realizar venda a prazo para clientes governamentais");
+        }
+        if (((Pessoa) getCliente()).consultarLimiteDisponivel() - getValorTotal() < 0) {
+            throw new VendaInvalidaException("Não há limite de credito disponivel para realizar a transação!");
+        }
     }
 
     @Override

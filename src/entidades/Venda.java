@@ -5,6 +5,12 @@
  */
 package entidades;
 
+import exceptions.DescontoInvalidoException;
+import exceptions.PercentualImpostoException;
+import exceptions.PrazoEntregaInvalidoException;
+import exceptions.ValorVendaInvalidoExeption;
+import exceptions.VendaInvalidaException;
+
 /**
  *
  * @author Lucas Gabriel
@@ -41,6 +47,9 @@ public abstract class Venda {
     }
 
     public void setPrazoEntrega(int prazoEntrega) {
+        if (prazoEntrega < 0) {
+            throw new PrazoEntregaInvalidoException("Não é permitido prazo de entrega menor que 0!");
+        }
         this.prazoEntrega = prazoEntrega;
     }
 
@@ -49,6 +58,9 @@ public abstract class Venda {
     }
 
     public void setPercentualImposto(double percentualImposto) {
+        if (percentualImposto < 0 || percentualImposto > 100) {
+            throw new PercentualImpostoException("Só é permitido valores entre 0 e 100% para percentual de imposto!");
+        }
         this.percentualImposto = percentualImposto;
         atualizarValorTotal();
     }
@@ -58,6 +70,9 @@ public abstract class Venda {
     }
 
     public void setDesconto(double desconto) {
+        if (desconto < 0 || desconto > 100) {
+            throw new DescontoInvalidoException("Só é permitido valores entre 0 e 100% para desconto!");
+        }
         this.desconto = desconto;
         atualizarValorTotal();
     }
@@ -71,21 +86,25 @@ public abstract class Venda {
     }
 
     public void setValorVenda(double valorVenda) {
+        if (valorVenda < 0) {
+            throw new ValorVendaInvalidoExeption("Não é permitido valor de venda menor que 0!");
+        }
         this.valorVenda = valorVenda;
         atualizarValorTotal();
     }
 
     public double calcularDesconto() {
-        return valorVenda * desconto / 100;
+        return (valorVenda + calcularImposto()) * desconto / 100D;
     }
 
     public double calcularImposto() {
-        return valorVenda * percentualImposto / 100;
+        return valorVenda * percentualImposto / 100D;
     }
 
-    public boolean vendaValida() {
-        return getValorTotal() >= 0 && getValorVenda() >= 0 && getPrazoEntrega() >= 0
-                && getPercentualImposto() >= 0 && getDesconto() >= 0;
+    public void vendaValida() {
+        if (getValorTotal() < 0) {
+            throw new VendaInvalidaException("O valor total da venda possui valor negativo, por isso não é possível finalizar a venda!");
+        }
     }
 
     public abstract String imprimirCupom();

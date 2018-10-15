@@ -5,6 +5,9 @@
  */
 package entidades;
 
+import exceptions.LimiteCreditoInvalidoException;
+import exceptions.ValorAbertoInvalidoException;
+
 /**
  *
  * @author Lucas Gabriel
@@ -20,6 +23,9 @@ public abstract class Pessoa extends Cliente {
     }
 
     public void setLimiteCredito(double limiteCredito) {
+        if (limiteCredito < 0) {
+            throw new LimiteCreditoInvalidoException("Não é permitido inserir valores menores que 0 no limite de credito!");
+        }
         this.limiteCredito = limiteCredito;
     }
 
@@ -28,6 +34,12 @@ public abstract class Pessoa extends Cliente {
     }
 
     public void setValorAberto(double valorAberto) {
+        if (valorAberto < 0) {
+            throw new ValorAbertoInvalidoException("Não é permitido que o valor em aberto seja menor do que 0!");
+        }
+        if (valorAberto > limiteCredito) {
+            throw new ValorAbertoInvalidoException("Não é permitido ter um valor aberto maior que o limite de credito!");
+        }
         this.valorAberto = valorAberto;
     }
 
