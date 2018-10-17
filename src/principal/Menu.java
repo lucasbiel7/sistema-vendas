@@ -139,6 +139,8 @@ public class Menu {
         do {
             System.out.println("1- Imprimir cupom");
             System.out.println("2- Vendas registradas");
+            System.out.println("3- Consultar limite disponível");
+            System.out.println("4 - Imprimir cliente");
             System.out.println("0- Sair");
             op = scannerNumerico.nextInt();
             switch (op) {
@@ -157,9 +159,28 @@ public class Menu {
                     break;
                 case 2:
                     imprimirVendas(vendas);
+                case 3:
+                    System.out.println("Digite o identificador do usuário");
+                    id = scannerNumerico.nextInt();
+                    Cliente cliente = clientes.stream().filter(t -> t.getId() == id).findFirst().orElse(null);
+                    if (cliente == null) {
+                        System.out.println("Cliente não encontrado");
+                    } else if (cliente instanceof Pessoa) {
+                        System.out.printf("Limite de credito: %.2f\n", ((Pessoa) cliente).consultarLimiteDisponivel());
+                    } else {
+                        System.out.println("Esse cliente não possui limite de credito!");
+                    }
+                    break;
+                case 4:
+                    System.out.println("Digite o identificador do usuário");
+                    id = scannerNumerico.nextInt();
+                    cliente = clientes.stream().filter(t -> t.getId() == id).findFirst().orElse(null);
+                    System.out.println(cliente.imprimirDados());
+                    break;
                 default:
                     System.out.println("Opção inválida!");
                     break;
+
             }
         } while (op != 0);
 
